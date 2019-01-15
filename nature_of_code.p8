@@ -4,12 +4,22 @@ __lua__
 
 player = { x = 20, y = 20 }
 
-function player:step()
+function player:random_step()
   direction = flr(rnd(4))
 
   if direction == 0 then self.x += 1
   elseif direction == 1 then self.x -= 1
   elseif direction == 2 then self.y += 1
+  else self.y -= 1
+  end
+end
+
+function player:biased_step()
+  direction = rnd(1)
+
+  if direction < 0.4 then self.x += 1
+  elseif direction < 0.6 then self.x -= 1
+  elseif direction < 0.8 then self.y += 1
   else self.y -= 1
   end
 end
@@ -29,6 +39,6 @@ function _init()
 end
 
 function _draw()
-  player:step()
+  player:biased_step()
   player:draw()
 end
