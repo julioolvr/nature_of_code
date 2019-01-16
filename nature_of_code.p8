@@ -27,10 +27,10 @@ end
 
 function player:monte_carlo_step()
   repeat
-    max_size = flr(rnd(10)) + 1
-  until max_size * 1.5 < rnd(10) + 1
+    max_size = flr(rnd(10)) -- 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+  until max_size > rnd(10) ^ 2
 
-  step_size = rnd(max_size)
+  step_size = flr(rnd(max_size)) + 1
   self:random_step(step_size)
 end
 
