@@ -61,29 +61,41 @@ function player:draw()
   )
 end
 
-function draw_perlin_background()
+function generate_perlin_background()
   local scale = 0.05
 
   for x=0,127 do
+    perlin_background[x] = {}
     for y=0,127 do
       local noise = perlin:noise(x * scale, y * scale, 0.1)
-      color = 1
+      pixel_color = 1
 
-      if noise > -0.25 then color = 13 end
-      if noise > -0.1 then color = 12 end
-      if noise > 0 then color = 9 end
-      if noise > 0.1 then color = 11 end
-      if noise > 0.4 then color = 4 end
-      if noise > 0.6 then color = 7 end
+      if noise > -0.25 then pixel_color = 13 end
+      if noise > -0.1 then pixel_color = 12 end
+      if noise > 0 then pixel_color = 9 end
+      if noise > 0.1 then pixel_color = 11 end
+      if noise > 0.4 then pixel_color = 4 end
+      if noise > 0.6 then pixel_color = 7 end
 
-      pset(x, y, color)
+      perlin_background[x][y] = pixel_color
     end
   end
 end
 
+function draw_perlin_background()
+  for x=0,127 do
+    for y=0,127 do
+      pset(x, y, perlin_background[x][y])
+    end
+  end
+end
+
+perlin_background = {}
+
 function _init()
   cls()
   perlin:load()
+  generate_perlin_background()
   color(3)
 end
 
