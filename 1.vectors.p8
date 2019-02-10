@@ -13,6 +13,14 @@ function Vector2:new(o)
   return setmetatable(o or {}, self)
 end
 
+function Vector2:random()
+  local x = rnd(10) - 5
+  local y = rnd(10) - 5
+  local vector = Vector2:new{ x = x, y = y }
+  vector:normalize()
+  return vector
+end
+
 function Vector2:add(other)
   self.x += other.x
   self.y += other.y
@@ -60,7 +68,7 @@ Mover = {
   max_velocity = 10,
   position = Vector2:new{ x = 20, y = 20 },
   velocity = Vector2:new{ x = 0, y = 0 },
-  acceleration = Vector2:new{ x = -0.001, y = 0.01 }
+  acceleration = Vector2:new{ x = 0, y = 0 }
 }
 Mover.__index = Mover
 
@@ -69,8 +77,11 @@ function Mover:new(o)
 end
 
 function Mover:update()
+  self.acceleration = Vector2:random()
+
   self.velocity:add(self.acceleration)
   self.velocity:limit(self.max_velocity)
+
   self.position:add(self.velocity)
 end
 
@@ -91,7 +102,7 @@ position = Vector2:new{ x = 20, y = 30 }
 velocity = Vector2:new{ x = 1, y = 2 }
 
 center = Vector2:new{ x = LIMIT / 2, y = LIMIT / 2 }
-ball = Mover:new{ velocity = Vector2:new{ x = 1, y = 2 } }
+ball = Mover:new()
 
 function _init()
   -- Enable devkit mode to read the mouse position
