@@ -34,6 +34,14 @@ function Vector2:magnitude()
   return sqrt(self.x^2 + self.y^2)
 end
 
+function Vector2:normalize()
+  local magnitude = self:magnitude()
+
+  if magnitude ~= 0 then
+    self:div(magnitude)
+  end
+end
+
 --
 
 position = Vector2:new{ x = 20, y = 30 }
@@ -67,8 +75,10 @@ end
 function draw_line()
   local mouse_position = Vector2:new{ x = stat(32), y = stat(33) }
   mouse_position:subtract(center)
-  mouse_position:div(2)
   print(mouse_position:magnitude())
+
+  mouse_position:normalize()
+  mouse_position:mult(20)
 
   mouse_position:add(center)
 
