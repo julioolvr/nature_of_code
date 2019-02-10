@@ -7,7 +7,11 @@ SCREEN_SIZE = 128
 creatures = {}
 
 function _init()
-  local fly = Creature.new{ color = 5 }
+  local fly = Creature.new{
+    color = 5,
+    velocity = Vector2.new{ x = 0, y = 0 },
+    position = Vector2.new{ x = 20, y = 20 }
+  }
 
   function fly:behave()
     self.acceleration = Vector2.random()
@@ -15,6 +19,32 @@ function _init()
   end
 
   creatures[1] = fly
+
+  local snake = Creature.new{
+    color = 3,
+    size = 2,
+    max_velocity = 2,
+    velocity = Vector2.new{ x = 0, y = 0 },
+    position = Vector2.new{ x = 30, y = 30 }
+  }
+
+  function snake:behave()
+    local side_acceleration
+
+    if self.velocity.x > 1 then
+      side_acceleration = -0.6
+    elseif self.velocity.x < -1 then
+      side_acceleration = 0.6
+    elseif self.acceleration then
+      side_acceleration = self.acceleration.x
+    else
+      side_acceleration = 0.6
+    end
+
+    self.acceleration = Vector2.new{ x = side_acceleration, y = 1 }
+  end
+
+  creatures[2] = snake
 end
 
 function _draw()
@@ -90,9 +120,7 @@ end
 Creature = {
   color = 7,
   size = 1,
-  max_velocity = 5,
-  velocity = Vector2.new{x = 0, y = 0},
-  position = Vector2.new{x = 20, y = 20}
+  max_velocity = 5
 }
 
 Creature.__index = Creature
