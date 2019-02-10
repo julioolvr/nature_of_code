@@ -25,6 +25,11 @@ function Vector2:mult(scalar)
   self.y *= scalar
 end
 
+function Vector2:div(scalar)
+  self.x /= scalar
+  self.y /= scalar
+end
+
 --
 
 position = Vector2:new{ x = 20, y = 30 }
@@ -58,7 +63,7 @@ end
 function draw_line()
   local mouse_position = Vector2:new{ x = stat(32), y = stat(33) }
   mouse_position:subtract(center)
-  mouse_position:mult(0.5)
+  mouse_position:div(2)
   mouse_position:add(center)
 
   line(
