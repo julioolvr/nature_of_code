@@ -3,6 +3,9 @@ version 16
 __lua__
 
 LIMIT = 128
+
+--
+
 Vector2 = { x = 0, y = 0 }
 Vector2.__index = Vector2
 
@@ -44,10 +47,35 @@ end
 
 --
 
+Mover = { velocity = Vector2:new{ x = 1, y = 2 }, position = Vector2:new{ x = 20, y = 20 } }
+Mover.__index = Mover
+
+function Mover:new(o)
+  return setmetatable(o or {}, self)
+end
+
+function Mover:update()
+  self.position:add(self.velocity)
+end
+
+function Mover:display()
+  circfill(self.position.x, self.position.y)
+end
+
+function Mover:check_edges()
+  if self.position.x > LIMIT then self.position.x = 0 end
+  if self.position.x < 0 then self.position.x = LIMIT end
+  if self.position.y > LIMIT then self.position.y = 0 end
+  if self.position.y < 0 then self.position.y = LIMIT end
+end
+
+--
+
 position = Vector2:new{ x = 20, y = 30 }
 velocity = Vector2:new{ x = 1, y = 2 }
 
 center = Vector2:new{ x = LIMIT / 2, y = LIMIT / 2 }
+ball = Mover:new{ velocity = { x = 1, y = 2 } }
 
 function _init()
   -- Enable devkit mode to read the mouse position
@@ -56,13 +84,10 @@ end
 
 function _draw()
   cls()
-  draw_ball()
+  ball:update()
+  ball:check_edges()
+  ball:display()
   draw_line()
-end
-
-function draw_ball()
-  move()
-  circfill(position.x, position.y)
 end
 
 function move()
@@ -75,7 +100,6 @@ end
 function draw_line()
   local mouse_position = Vector2:new{ x = stat(32), y = stat(33) }
   mouse_position:subtract(center)
-  print(mouse_position:magnitude())
 
   mouse_position:normalize()
   mouse_position:mult(20)
