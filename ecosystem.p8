@@ -7,7 +7,7 @@ SCREEN_SIZE = 128
 creatures = {}
 
 function _init()
-  local fly = Creature:new()
+  local fly = Creature.new{ color = 5 }
 
   function fly:behave()
     self.acceleration = Vector2.random()
@@ -21,8 +21,6 @@ function _draw()
   cls()
 
   for _, creature in pairs(creatures) do
-    -- print_vec('Velocity', creature.velocity)
-    -- print_vec('Acceleration', creature.acceleration)
     creature:behave()
     creature:move()
     creature:draw()
@@ -35,11 +33,7 @@ Vector2 = { x = 0, y = 0 }
 Vector2.__index = Vector2
 
 function Vector2.new(o)
-  return Vector2.__init__(Vector2, o)
-end
-
-function Vector2:__init__(o)
-  return setmetatable(o or {}, self)
+  return setmetatable(o or {}, Vector2)
 end
 
 function Vector2.random()
@@ -94,19 +88,17 @@ end
 --
 
 Creature = {
-  color = 5,
+  color = 7,
   size = 1,
   max_velocity = 5,
   velocity = Vector2.new{x = 0, y = 0},
   position = Vector2.new{x = 20, y = 20}
 }
 
-function Creature:__init__(o)
-  return setmetatable(o or {}, self)
-end
+Creature.__index = Creature
 
 function Creature.new(o)
-  return Creature.__init__(Creature, o)
+  return setmetatable(o or {}, Creature)
 end
 
 function Creature:draw()
