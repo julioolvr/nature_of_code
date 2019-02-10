@@ -65,7 +65,8 @@ end
 --
 
 Mover = {
-  max_velocity = 10,
+  acceleration_scale = 0.01,
+  max_velocity = 5,
   position = Vector2:new{ x = 20, y = 20 },
   velocity = Vector2:new{ x = 0, y = 0 },
   acceleration = Vector2:new{ x = 0, y = 0 }
@@ -76,8 +77,19 @@ function Mover:new(o)
   return setmetatable(o or {}, self)
 end
 
+function Mover.random()
+  return Mover:new{
+    position = Vector2:new{ x = flr(rnd(LIMIT)), y = flr(rnd(LIMIT)) }
+  }
+end
+
 function Mover:update()
-  self.acceleration = Vector2:random()
+  local mouse_position = get_mouse_position()
+  self.acceleration = get_mouse_position()
+  self.acceleration:subtract(self.position)
+  local current_magnitude = self.acceleration:magnitude()
+  self.acceleration:normalize()
+  self.acceleration:mult(self.acceleration_scale * current_magnitude)
 
   self.velocity:add(self.acceleration)
   self.velocity:limit(self.max_velocity)
@@ -102,7 +114,13 @@ position = Vector2:new{ x = 20, y = 30 }
 velocity = Vector2:new{ x = 1, y = 2 }
 
 center = Vector2:new{ x = LIMIT / 2, y = LIMIT / 2 }
-ball = Mover:new()
+balls = {
+  Mover.random(),
+  Mover.random(),
+  Mover.random(),
+  Mover.random(),
+  Mover.random()
+}
 
 function _init()
   -- Enable devkit mode to read the mouse position
@@ -111,10 +129,15 @@ end
 
 function _draw()
   cls()
-  ball:update()
-  ball:check_edges()
-  ball:display()
-  draw_line()
+
+  for i=1, 5 do
+    local ball = balls[i]
+    ball:update()
+    ball:check_edges()
+    ball:display()
+  end
+
+  draw_mouse()
 end
 
 function move()
@@ -125,7 +148,7 @@ function move()
 end
 
 function draw_line()
-  local mouse_position = Vector2:new{ x = stat(32), y = stat(33) }
+  local mouse_position = get_mouse_position()
   mouse_position:subtract(center)
 
   mouse_position:normalize()
@@ -139,6 +162,15 @@ function draw_line()
     mouse_position.x,
     mouse_position.y
   )
+end
+
+function draw_mouse()
+  local mouse_position = get_mouse_position()
+  rectfill(mouse_position.x, mouse_position.y, mouse_position.x + 2, mouse_position.y + 2)
+end
+
+function get_mouse_position()
+  return Vector2:new{ x = stat(32), y = stat(33) }
 end
 
 function print_vec(name, vec)
