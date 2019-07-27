@@ -1,4 +1,4 @@
-/* exported Mover */
+/* exported Mover, Liquid */
 class Mover {
   constructor ({
     mass = 1.0,
@@ -16,7 +16,7 @@ class Mover {
     this.mass = mass
   }
 
-  update (context) {
+  update () {
     this.velocity.add(this.acceleration)
 
     if (this.speedLimit) {
@@ -29,7 +29,8 @@ class Mover {
 
   display () {
     strokeWeight(2)
-    fill('rgba(100, 100, 100, .2)')
+    stroke(10)
+    fill('rgba(100, 100, 100, .8)')
     ellipse(this.location.x, this.location.y, this.size.width, this.size.height)
   }
 
@@ -53,5 +54,39 @@ class Mover {
       this.location.y = 0
       this.velocity.y *= -1
     }
+  }
+
+  isInsideRectangle (rectangle) {
+    return (
+      this.location.x >= rectangle.x &&
+      this.location.x <= rectangle.x + rectangle.width &&
+      this.location.y >= rectangle.y &&
+      this.location.y <= rectangle.y + rectangle.height
+    )
+  }
+
+  drag (liquid) {
+    const speedSq = this.velocity.magSq()
+    const dragMagnitude = speedSq * liquid.drag
+    const dragVector = p5.Vector.mult(this.velocity, -1)
+    dragVector.normalize()
+    dragVector.mult(dragMagnitude)
+    this.applyForce(dragVector)
+  }
+}
+
+class Liquid {
+  constructor ({ x, y, width, height, drag }) {
+    this.x = x
+    this.y = y
+    this.width = width
+    this.height = height
+    this.drag = drag
+  }
+
+  display () {
+    noStroke()
+    fill(50)
+    rect(this.x, this.y, this.width, this.height)
   }
 }

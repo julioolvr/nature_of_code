@@ -15,7 +15,12 @@
     "p5": "readonly",
     "createCanvas": "readonly",
     "noise": "readonly",
-    "clear": "readonly"
+    "clear": "readonly",
+    "noStroke": "readonly",
+    "rect": "readonly",
+    "random": "readonly",
+    "background": "readonly",
+    "stroke": "readonly"
   },
   "parserOptions": {
     "ecmaVersion": 2018,
