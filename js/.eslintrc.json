@@ -1,0 +1,27 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": false
+  },
+  "extends": ["standard"],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly",
+    "createVector": "readonly",
+    "strokeWeight": "readonly",
+    "fill": "readonly",
+    "ellipse": "readonly",
+    "p5": "readonly",
+    "createCanvas": "readonly",
+    "noise": "readonly",
+    "clear": "readonly"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "script"
+  },
+  "rules": {
+    "no-unused-vars": ["error"]
+  }
+}
