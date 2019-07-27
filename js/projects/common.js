@@ -1,4 +1,4 @@
-/* exported Mover, Liquid */
+/* exported Mover, Liquid, Attractor */
 class Mover {
   constructor ({
     mass = 1.0,
@@ -88,5 +88,29 @@ class Liquid {
     noStroke()
     fill(50)
     rect(this.x, this.y, this.width, this.height)
+  }
+}
+
+class Attractor {
+  constructor ({ mass = 1.0, location = createVector(0, 0), G = 1 } = {}) {
+    this.location = location
+    this.mass = mass
+    this.G = G
+  }
+
+  display () {
+    stroke(0)
+    fill(175, 200)
+    ellipse(this.location.x, this.location.y, this.mass * 10, this.mass * 10)
+  }
+
+  attract (other) {
+    const force = p5.Vector.sub(this.location, other.location)
+    const distanceSq = constrain(force.magSq(), 5, 25)
+    force.normalize()
+    const strength = (this.G * this.mass * other.mass) / distanceSq
+    force.mult(strength)
+
+    return force
   }
 }
