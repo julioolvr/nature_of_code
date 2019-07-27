@@ -20,7 +20,8 @@
     "rect": "readonly",
     "random": "readonly",
     "background": "readonly",
-    "stroke": "readonly"
+    "stroke": "readonly",
+    "constrain": "readonly"
   },
   "parserOptions": {
     "ecmaVersion": 2018,
