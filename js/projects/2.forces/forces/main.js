@@ -1,8 +1,8 @@
 /* global Mover */
 /* exported setup, draw */
 
-const WIDTH = 640
-const HEIGHT = 480
+const WIDTH = 1080
+const HEIGHT = 920
 
 const BALLONS_COUNT = 50
 const FRICTION_C = 0.01
